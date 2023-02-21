@@ -4,15 +4,35 @@
   "name": "Unabeepable",
   "version": "1.0",
   "description": "Alerts the user when the word 'Unavailable' appears on the page.",
-  "icons":  [
+  "icons": [
     {
-      "src": "/icon.png",
+      "src": "./images/icon-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/icon-alert.png",
+      "src": "./images/icon-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icon-alert-128.png",
       "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icon-alert-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icon-alert-16.png",
+      "sizes": "16x16",
       "type": "image/png"
     }
   ],
@@ -23,10 +43,13 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_icon": "icon.png",
+    "default_icon": {
+      "16": "./images/icon-16.png",
+      "48": "./images/icon-48.png",
+      "128": "./images/icon-128.png"
+    },
     "default_title": "Unabeepable",
     "default_popup": "popup.html"
   }
 }
-
 

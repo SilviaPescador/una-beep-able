@@ -13,7 +13,16 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     chrome.scripting.executeScript({
       target: { tabId: tabId },
       function: () => {
-        const isUnavailable = document.querySelector('._669o')?.innerText.includes('Unavailable');
+        const isUnavailable = document.body.innerText.includes('Unavailable');
+        const iconName = isUnavailable ? 'icon-alert' : 'icon';
+        const iconSizes = [16, 48, 128];
+        const icons = {};
+
+        for (const size of iconSizes) {
+          icons[`${iconName}-${size}`] = `images/${iconName}-${size}.png`;
+        }
+
+        chrome.action.setIcon({ path: icons });
 
         if (isUnavailable) {
           const sound = new Audio(chrome.runtime.getURL('beep.mp3'));
