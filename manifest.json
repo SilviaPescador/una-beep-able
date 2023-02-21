@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "permissions": ["scripting"],
+  "name": "Unabeepable",
+  "version": "1.0",
+  "description": "Alerts the user when the word 'Unavailable' appears on the page.",
+  "icons":  [
+    {
+      "src": "/icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-alert.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": "icon.png",
+    "default_title": "Unabeepable",
+    "default_popup": "popup.html"
+  }
+}
+
+
