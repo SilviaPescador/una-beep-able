@@ -13,9 +13,9 @@ function checkForUnavailable(tabId, changeInfo, tab) {
           sound.play();
 
           const iconPath = {
-            16: './images/icon-alert-16.png',
-            48: './images/icon-alert-48.png',
-            128: './images/icon-alert-128.png',
+            16: '/images/icon-alert-16.png',
+            48: '/images/icon-alert-48.png',
+            128: '/images/icon-alert-128.png',
           };
 
           chrome.action.setIcon({
@@ -35,15 +35,15 @@ function checkForUnavailable(tabId, changeInfo, tab) {
 
           chrome.notifications.create({
             type: 'basic',
-            iconUrl: './images/icon-alert-48.png',
+            iconUrl: '/images/icon-alert-48.png',
             title: 'Unabeepable - Unavailable Detected',
             message: 'The word "Unavailable" was detected in the page content.',
           });
         } else {
           const iconPath = {
-            16: './images/icon-16.png',
-            48: './images/icon-48.png',
-            128: './images/icon-128.png',
+            16: '/images/icon-16.png',
+            48: '/images/icon-48.png',
+            128: '/images/icon-128.png',
           };
 
           chrome.action.setIcon({

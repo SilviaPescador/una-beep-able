@@ -19,7 +19,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         const icons = {};
 
         for (const size of iconSizes) {
-          icons[`${iconName}-${size}`] = `images/${iconName}-${size}.png`;
+          icons[`${iconName}-${size}`] = `/images/${iconName}-${size}.png`;
         }
 
         chrome.action.setIcon({ path: icons });
