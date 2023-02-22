@@ -1,3 +1,5 @@
+import { ContentScript } from './content.js'
+
 /* 
 Escucha y envía mensajes a la página de contenido y al popup. 
 Establece el icono de la extensión y reproduce un sonido si la página contiene la palabra "Unavailable". 

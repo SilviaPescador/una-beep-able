@@ -5,7 +5,7 @@ Establece un badge en el icono de la extensión y establece el título de la ext
 Este archivo se comunica con background.js a través de los mensajes.
 */
 
-class ContentScript {
+export class ContentScript {
   constructor() {
     this.iconPaths = {
       available: {
@@ -102,3 +102,4 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     await contentScript.checkForUnavailable(tabId);
   }
 });
+
