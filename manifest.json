@@ -1,55 +1,34 @@
 {
   "manifest_version": 3,
-  "permissions": ["scripting"],
   "name": "Unabeepable",
   "version": "1.0",
-  "description": "Alerts the user when the word 'Unavailable' appears on the page.",
-  "icons": [
-    {
-      "src": "/images/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "/images/icon-48.png",
-      "sizes": "48x48",
-      "type": "image/png"
-    },
-    {
-      "src": "/images/icon-16.png",
-      "sizes": "16x16",
-      "type": "image/png"
-    },
-    {
-      "src": "/images/icon-alert-128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "/images/icon-alert-48.png",
-      "sizes": "48x48",
-      "type": "image/png"
-    },
-    {
-      "src": "/images/icon-alert-16.png",
-      "sizes": "16x16",
-      "type": "image/png"
-    }
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "description": "Detects the word 'Unavailable' and sounds an alert when found.",
+  "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
-    "default_icon": {
-      "16": "/images/icon-16.png",
-      "48": "/images/icon-48.png",
-      "128": "/images/icon-128.png"
-    },
     "default_title": "Unabeepable",
-    "default_popup": "popup.html"
-  }
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting", "notifications"],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["beep.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
+
+
 
