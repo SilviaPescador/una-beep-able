@@ -20,14 +20,15 @@
       "128": "images/icon-128.png"
     }
   },
-  "permissions": ["activeTab", "scripting", "notifications"],
+  "permissions": ["activeTab", "scripting", "notifications", "audio"],
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
       "resources": ["sounds/beep.mp3"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "platforms": ["win", "mac", "linux"]
 }
 
 

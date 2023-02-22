@@ -1,4 +1,7 @@
+/* global chrome, Audio */
+
 'use strict'
+
 /*
 Verifica si la página actual contiene la palabra "Unavailable" 
 Notifica a background.js para que este actualice el icono y reproduzca el sonido correspondiente. 
@@ -26,8 +29,9 @@ export class ContentScript {
     const isUnavailable = await this.isUnavailable(tabId);
 
     if (isUnavailable) {
-      const sound = new Audio(chrome.runtime.getURL('sounds/beep.mp3'));
-      sound.play();
+      const sound = await chrome.audio.create({type: "notification"});
+      await sound.setVolume(1.0);
+      await sound.play(chrome.runtime.getURL('sounds/beep.mp3'));
 
       const iconPath = this.iconPaths.unavailable;
 
