@@ -7,60 +7,22 @@ Este archivo es el responsable de la lógica principal de la extensión.
 
 class BackgroundScript {
   constructor() {
+    this.contentScript = new ContentScript();
     chrome.runtime.onMessage.addListener(this.onMessage.bind(this));
     chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
   }
 
   async onMessage(request, sender, sendResponse) {
     if (request.message === 'check_unavailable') {
-      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      chrome.tabs.sendMessage(activeTab.id, { message: 'check_unavailable' });
+      this.contentScript.checkForUnavailable(sender.tab.id);
     }
   }
 
   async onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
-      const isUnavailable = await this.checkForUnavailable(tabId);
-      const iconPaths = isUnavailable ? contentScript.iconPaths.unavailable : contentScript.iconPaths.available;
-  
-      await chrome.action.setIcon({
-        path: iconPaths,
-        tabId,
-      });
-  
-      if (isUnavailable) {
-        const sound = new Audio(chrome.runtime.getURL('beep.mp3'));
-        sound.play();
-      }
-  
-      await chrome.action.setBadgeText({
-        text: isUnavailable ? '!' : '',
-        tabId,
-      });
-  
-      await chrome.action.setTitle({
-        title: isUnavailable ? 'Unabeepable - Unavailable Detected' : 'Unabeepable',
-        tabId,
-      });
+      await this.contentScript.checkForUnavailable(tabId);
     }
   }
-
-  async checkForUnavailable(tabId) {
-    const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    const isUnavailable = await chrome.scripting.executeScript({
-      target: { tabId: activeTab.id },
-      func: () => {
-        const element = document.querySelector('._699o');
-        if (element && element.textContent.trim() === 'Undefined') {
-          return true;
-        }
-        return false;
-      },
-    });
-  
-    return isUnavailable;
-  }
-  
 }
 
 new BackgroundScript();
