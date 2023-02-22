@@ -21,35 +21,46 @@ class BackgroundScript {
   async onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
       const isUnavailable = await this.checkForUnavailable(tabId);
-      const iconName = isUnavailable ? 'icon-alert' : 'icon';
-      const iconSizes = [16, 48, 128];
-      const icons = {};
-
-      for (const size of iconSizes) {
-        icons[`${iconName}-${size}`] = `/images/${iconName}-${size}.png`;
-      }
-
-      chrome.action.setIcon({ path: icons });
-
+      const iconPaths = isUnavailable ? contentScript.iconPaths.unavailable : contentScript.iconPaths.available;
+  
+      await chrome.action.setIcon({
+        path: iconPaths,
+        tabId,
+      });
+  
       if (isUnavailable) {
         const sound = new Audio(chrome.runtime.getURL('beep.mp3'));
         sound.play();
       }
+  
+      await chrome.action.setBadgeText({
+        text: isUnavailable ? '!' : '',
+        tabId,
+      });
+  
+      await chrome.action.setTitle({
+        title: isUnavailable ? 'Unabeepable - Unavailable Detected' : 'Unabeepable',
+        tabId,
+      });
     }
   }
 
   async checkForUnavailable(tabId) {
     const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
     const isUnavailable = await chrome.scripting.executeScript({
       target: { tabId: activeTab.id },
-      function: () => {
-        return document.body.innerText.includes('Unavailable');
+      func: () => {
+        const element = document.querySelector('._699o');
+        if (element && element.textContent.trim() === 'Undefined') {
+          return true;
+        }
+        return false;
       },
     });
-
-    return isUnavailable[0];
+  
+    return isUnavailable;
   }
+  
 }
 
 new BackgroundScript();

@@ -73,12 +73,18 @@ class ContentScript {
   async isUnavailable(tabId) {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab.id !== tabId) return false;
-
+  
     const [result] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: () => document.body.innerText.includes('Unavailable'),
+      func: () => {
+        const element = document.querySelector('._699o');
+        if (element && element.textContent.trim() === 'Undefined') {
+          return true;
+        }
+        return false;
+      },
     });
-
+  
     return result;
   }
 }
