@@ -26,7 +26,7 @@ export class ContentScript {
     const isUnavailable = await this.isUnavailable(tabId);
 
     if (isUnavailable) {
-      const sound = new Audio(chrome.runtime.getURL('beep.mp3'));
+      const sound = new Audio(chrome.runtime.getURL('sounds/beep.mp3'));
       sound.play();
 
       const iconPath = this.iconPaths.unavailable;

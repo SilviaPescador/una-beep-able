@@ -24,7 +24,7 @@
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
-      "resources": ["beep.mp3"],
+      "resources": ["sounds/beep.mp3"],
       "matches": ["<all_urls>"]
     }
   ]
