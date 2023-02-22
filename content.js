@@ -1,3 +1,4 @@
+'use strict'
 /*
 Verifica si la página actual contiene la palabra "Unavailable" 
 Notifica a background.js para que este actualice el icono y reproduzca el sonido correspondiente. 
@@ -77,7 +78,7 @@ export class ContentScript {
     const [result] = await chrome.scripting.executeScript({
       target: { tabId },
       func: () => {
-        const element = document.querySelector('._699o');
+        const element = document.querySelector('.ggj6brxn gfz4du6o r7fjleex g0rxnol2 lhj4utae le5p0ye3 l7jjieqr _11JPr');
         if (element && element.textContent.trim() === 'Unavailable') {
           return true;
         }
@@ -98,7 +99,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete') {
+  if (tab.url && !tab.url.startsWith('chrome://') && changeInfo.status === 'complete') {
     await contentScript.checkForUnavailable(tabId);
   }
 });
