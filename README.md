@@ -1,0 +1,5 @@
+La relación entre popup.js y background.js es que popup.js es un script que se ejecuta en la ventana emergente de la extensión y que puede comunicarse con el script background.js, que se ejecuta en segundo plano en el contexto de la extensión.
+
+En este caso particular, popup.js se comunica con background.js a través del método chrome.runtime.sendMessage(), que le permite enviar un mensaje a background.js. A su vez, background.js está escuchando los mensajes entrantes a través del método chrome.runtime.onMessage.addListener(), por lo que puede recibir los mensajes enviados por popup.js.
+
+La comunicación entre popup.js y background.js permite que la extensión realice acciones en segundo plano mientras la ventana emergente está abierta. En este caso, popup.js envía un mensaje a background.js para que este último busque la cadena "Unavailable" en la pestaña activa y emita un sonido si se encuentra

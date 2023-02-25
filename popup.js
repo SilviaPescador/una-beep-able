@@ -1,19 +1,47 @@
-/*
- Actualiza el icono de la extensión  
- Muestra una notificación si la página actual contiene la palabra "Unavailable". 
- Este archivo se comunica con background.js a través de los mensajes.
- */
 
-// Crea una función para enviar mensajes al contenido de la pestaña activa
-async function sendMessageToActiveTab(message) {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return new Promise(resolve => {
-    chrome.tabs.sendMessage(tab.id, { message }, resolve);
-  });
-}
-
-// Agrega un manejador de eventos para el botón de "Detectar no disponible"
+// Agrega un manejador de eventos para el botón de "Detectar Unavailable"
 const detectButton = document.getElementById('detect-unavailable');
 detectButton.addEventListener('click', async function () {
-  await sendMessageToActiveTab('check_unavailable');
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab) {
+    const port = chrome.runtime.connect({ name: 'popup' });
+    port.postMessage({ message: 'check_unavailable', tabId: tab.id });
+  } else {
+    console.error('No se encontró la pestaña activa');
+  }
 });
+
+
+
+
+
+// Crea una función para enviar mensajes al contenido de la pestaña activa
+// async function sendMessageToTab(tabId, message) {
+//   return new Promise(resolve => {
+//     chrome.tabs.sendMessage(tabId, { message }, resolve);
+//   });
+// }
+
+
+// // Agrega un manejador de eventos para el botón de "Detectar Unavailable"
+// const detectButton = document.getElementById('detect-unavailable');
+// detectButton.addEventListener('click', async function () {
+//   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+//   if (tab) {
+//     await sendMessageToTab(tab.id, 'check_unavailable');
+//   } else {
+//     console.error('No se encontró la pestaña activa');
+//   }
+// });
+
+
+
+// Solicitar permisos de reproducción de audio
+// await chrome.permissions.request({permissions: ['audio']}, function (granted) {
+//   if (granted) {
+//     console.log('Permisos de audio concedidos');
+//   } else {
+//     console.log('Permisos de audio no concedidos');
+//     return;
+//   }
+// });

@@ -1,13 +1,6 @@
-/* global chrome, Audio */
+/* global chrome */
 
 'use strict'
-
-/*
-Verifica si la página actual contiene la palabra "Unavailable" 
-Notifica a background.js para que este actualice el icono y reproduzca el sonido correspondiente. 
-Establece un badge en el icono de la extensión y establece el título de la extensión. 
-Este archivo se comunica con background.js a través de los mensajes.
-*/
 
 export class ContentScript {
   constructor() {
@@ -24,14 +17,18 @@ export class ContentScript {
       },
     };
   }
-
+  // usa isUnavailable para verificar si "Unavailable" está, y si es true, emite pitido, actualiza icono, título y texto de la extension como notificación.
   async checkForUnavailable(tabId) {
     const isUnavailable = await this.isUnavailable(tabId);
 
+
     if (isUnavailable) {
-      const sound = await chrome.audio.create({type: "notification"});
-      await sound.setVolume(1.0);
-      await sound.play(chrome.runtime.getURL('sounds/beep.mp3'));
+
+      chrome.tabs.create({ url: chrome.runtime.getURL('sounds/beep.ogg') });
+
+      if (chrome.tts) {
+        chrome.tts.speak('Hey, wake up!');
+      }
 
       const iconPath = this.iconPaths.unavailable;
 
@@ -40,7 +37,7 @@ export class ContentScript {
           path: iconPath,
           tabId,
         }),
-        chrome.action.setBadgeText({
+        chrome.action.setBadgeText({ // ok
           text: '!',
           tabId,
         }),
@@ -55,6 +52,9 @@ export class ContentScript {
           message: 'The word "Unavailable" was detected in the page content.',
         }),
       ]);
+
+     
+
     } else {
       const iconPath = this.iconPaths.available;
 
@@ -74,28 +74,30 @@ export class ContentScript {
       ]);
     }
   }
-
+  // verifica si  "Unavailable" está en la pestaña especificada. true/false
   async isUnavailable(tabId) {
     const tab = await chrome.tabs.get(tabId);
     if (tab.id !== tabId) return false;
-  
+    console.log('tab.id:', tab.id)
+    console.log('tatId: ',tabId)
+    // chrome.scripting.executeScript devuelve un array de objetos. Destructuramos buscando solo 1 de esos objetos [result]
     const [result] = await chrome.scripting.executeScript({
       target: { tabId },
       func: () => {
-        const element = document.querySelector('.ggj6brxn gfz4du6o r7fjleex g0rxnol2 lhj4utae le5p0ye3 l7jjieqr _11JPr');
-        if (element && element.textContent.trim() === 'Unavailable') {
-          return true;
-        }
-        return false;
+        const element = document.querySelector('._21nHd');
+        console.log('element: ', element)
+        return element?.textContent?.trim() === 'Unavailable';
       },
     });
-  
-    return result;
+    console.log(result.result)
+    // del objeto [result] sacamos su propiedad booleana
+    return result.result;
   }
 }
 
 const contentScript = new ContentScript();
 
+// espero el mensaje "check_unavailable" y llama al método checkForUnavailable de la clase ContentScript
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.message === 'check_unavailable') {
     await contentScript.checkForUnavailable(sender.tab.id);
